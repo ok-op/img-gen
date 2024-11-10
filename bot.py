@@ -15,6 +15,7 @@ def download_video(url, custom_name="downloaded_video"):
     ydl_opts = {
         'format': 'best',
         'outtmpl': os.path.join(download_folder, f'{custom_name}.%(ext)s'),
+        'cookiefile': 'cookies.txt',  # কুকি ফাইলের পথ
     }
 
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
