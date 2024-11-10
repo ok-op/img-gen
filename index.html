@@ -4,113 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Downloader</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f4f9;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-        }
-        .container {
-            background-color: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            text-align: center;
-            width: 100%;
-            max-width: 500px;
-        }
-        h1 {
-            margin-bottom: 20px;
-        }
-        input[type="text"] {
-            width: 80%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 2px solid #ccc;
-            border-radius: 5px;
-            font-size: 16px;
-        }
-        button {
-            padding: 10px 20px;
-            background-color: #4CAF50;
-            border: none;
-            border-radius: 5px;
-            color: white;
-            font-size: 16px;
-            cursor: pointer;
-        }
-        button:hover {
-            background-color: #45a049;
-        }
-        .message {
-            margin-top: 20px;
-        }
-    </style>
 </head>
 <body>
-
-<div class="container">
-    <h1>Video Downloader</h1>
-    <p>Enter the URL of the video (YouTube, Instagram, etc.):</p>
-    <input type="text" id="urlInput" placeholder="Enter video URL here">
-    <br>
-    <button onclick="downloadVideo()">Download</button>
-    <button onclick="getMetadata()">Get Metadata</button>
-
-    <div class="message" id="message"></div>
-</div>
-
-<script>
-    function downloadVideo() {
-        const url = document.getElementById('urlInput').value;
-        if (!url) {
-            alert("Please enter a URL.");
-            return;
-        }
-
-        fetch(`/download?url=${encodeURIComponent(url)}`)
-            .then(response => response.json())
-            .then(data => {
-                if (data.download_url) {
-                    document.getElementById('message').innerHTML = `
-                        <p>Download link is ready:</p>
-                        <a href="${data.download_url}" target="_blank">Click here to download the video</a>
-                    `;
-                } else {
-                    document.getElementById('message').innerHTML = `<p>Error: ${data.error}</p>`;
-                }
-            })
-            .catch(error => {
-                document.getElementById('message').innerHTML = `<p>Error: ${error.message}</p>`;
-            });
-    }
-
-    function getMetadata() {
-        const url = document.getElementById('urlInput').value;
-        if (!url) {
-            alert("Please enter a URL.");
-            return;
-        }
-
-        fetch(`/metadata?url=${encodeURIComponent(url)}`)
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('message').innerHTML = `
-                    <p>Title: ${data.title}</p>
-                    <p>Description: ${data.description}</p>
-                    <p>Uploader: ${data.uploader}</p>
-                `;
-            })
-            .catch(error => {
-                document.getElementById('message').innerHTML = `<p>Error: ${error.message}</p>`;
-            });
-    }
-</script>
-
+    <h1>Download Video from YouTube, Instagram, or Facebook</h1>
+    <form action="/download" method="get">
+        <label for="url">Enter Video URL:</label>
+        <input type="text" id="url" name="url" placeholder="Paste URL here" required><br><br>
+        
+        <label for="name">Custom Name (optional):</label>
+        <input type="text" id="name" name="name" placeholder="Enter custom name for the file"><br><br>
+        
+        <button type="submit">Download</button>
+    </form>
 </body>
 </html>
