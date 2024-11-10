@@ -1,18 +1,18 @@
-# Step 1: Use an official Node.js runtime as a parent image
-FROM node:18
+# Use Node.js base image
+FROM node:14
 
-# Step 2: Set the working directory in the container
+# Set working directory
 WORKDIR /app
 
-# Step 3: Copy the package.json and install dependencies
-COPY package.json ./
+# Copy package.json and install dependencies
+COPY package*.json ./
 RUN npm install
 
-# Step 4: Copy the rest of the app's code
+# Copy all files to working directory
 COPY . .
 
-# Step 5: Expose the port the app will run on
+# Expose port 3000
 EXPOSE 3000
 
-# Step 6: Define the command to run the app
+# Start the application
 CMD ["node", "app.js"]
