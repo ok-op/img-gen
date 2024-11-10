@@ -1,6 +1,7 @@
 const express = require('express');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 const cheerio = require('cheerio'); // Import cheerio for HTML parsing
+const ytdlp = require('yt-dlp');  // Import yt-dlp
 
 const app = express();
 const PORT = 3000;
@@ -17,34 +18,19 @@ app.get('/download', async (req, res) => {
     }
 
     try {
-        // Construct the request URL for nyxs.pw service
-        const downloadUrl = `https://dl.nyxs.pw/?url=${encodeURIComponent(url)}`;
+        // Use yt-dlp to get download information
+        const info = await ytdlp(url);
 
-        // Fetch the page content of the given URL
-        const response = await fetch(downloadUrl);
+        // Extract the best video download URL
+        const downloadUrl = info.formats[0].url;  // Pick the best format URL
 
-        // Check if the response is OK
-        if (!response.ok) {
-            throw new Error(`Error fetching from nyxs.pw: ${response.status} ${response.statusText}`);
-        }
-
-        const html = await response.text(); // Get the raw HTML content
-        const $ = cheerio.load(html); // Parse the HTML with cheerio
-
-        // Extract the download link from the page
-        // You'll need to find the exact selector that contains the download link
-        const downloadLink = $('a').attr('href'); // This assumes the download link is in an <a> tag
-
-        console.log('Extracted download link:', downloadLink); // Log for debugging
-
-        if (downloadLink) {
-            // Send the download link back to the client
+        if (downloadUrl) {
             res.json({
                 message: 'File is ready to download',
-                download_url: downloadLink
+                download_url: downloadUrl
             });
         } else {
-            res.status(400).json({ error: 'Download link not found on the page' });
+            res.status(400).json({ error: 'Download link not found' });
         }
     } catch (error) {
         console.error('Error fetching download link:', error);
