@@ -1,16 +1,12 @@
 const express = require('express');
-const path = require('path');
-
-// Use dynamic import for node-fetch (because it's an ES module)
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const cheerio = require('cheerio'); // Import cheerio for HTML parsing
 
 const app = express();
-const PORT = 3000;  // Set PORT directly instead of using process.env
+const PORT = 3000;
 
-// Serve static files directly from the root directory
-app.use(express.static(path.join(__dirname)));
+app.use(express.static('public'));
 
-// Handle file download requests
 app.get('/download', async (req, res) => {
     const { url } = req.query;
 
@@ -19,26 +15,27 @@ app.get('/download', async (req, res) => {
     }
 
     try {
-        // Call the Nyxs API to get the download URL
-        const apiUrl = `https://dl.nyxs.pw/api?url=${encodeURIComponent(url)}`;
-        const response = await fetch(apiUrl);
-        
+        // Fetch the page content of the given URL
+        const response = await fetch(url);
+
         // Check if the response is OK
         if (!response.ok) {
-            throw new Error(`Error fetching from API: ${response.status} ${response.statusText}`);
+            throw new Error(`Error fetching from website: ${response.status} ${response.statusText}`);
         }
 
-        const data = await response.json();
-        
-        // Check if the response contains the expected download URL
-        if (data.status === 'success' && data.download_url) {
-            // Send the download URL to the client
+        const html = await response.text(); // Get the raw HTML content
+        const $ = cheerio.load(html); // Parse the HTML with cheerio
+
+        // Assuming the download link is contained in a specific element, e.g., <a> with id 'download-link'
+        const downloadLink = $('#download-link').attr('href');
+
+        if (downloadLink) {
             res.json({
                 message: 'File is ready to download',
-                download_url: data.download_url
+                download_url: downloadLink
             });
         } else {
-            res.status(400).json({ error: 'Unable to fetch the download link from the API' });
+            res.status(400).json({ error: 'Download link not found on the page' });
         }
     } catch (error) {
         console.error('Error fetching download link:', error);
@@ -46,7 +43,6 @@ app.get('/download', async (req, res) => {
     }
 });
 
-// Start the Express server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
