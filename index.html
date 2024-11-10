@@ -11,8 +11,8 @@
     <h1>AI Image Generator</h1>
     <form id="image-form">
       <input type="text" id="prompt" placeholder="Enter your prompt" required>
-      <input type="text" id="model" placeholder="Enter model" required>
-      <input type="text" id="style" placeholder="Enter style" required>
+      <input type="text" id="model" placeholder="Enter model (e.g., 'stable-diffusion')" required>
+      <input type="text" id="style" placeholder="Enter style (e.g., 'fantasy')" required>
       <button type="submit">Generate Image</button>
     </form>
     <div id="result"></div>
@@ -23,8 +23,8 @@
       e.preventDefault();
 
       const prompt = document.getElementById("prompt").value;
-      const model = document.getElementById("model").value;
-      const style = document.getElementById("style").value;
+      const model = document.getElementById("model").value; // Get model input
+      const style = document.getElementById("style").value; // Get style input
 
       const response = await fetch(`/generate-image?prompt=${encodeURIComponent(prompt)}&model=${encodeURIComponent(model)}&style=${encodeURIComponent(style)}`);
       const data = await response.json();
