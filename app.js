@@ -1,7 +1,7 @@
-const express = require('express');
-const fetch = require('node-fetch'); // Importing node-fetch to make API requests
-const cheerio = require('cheerio'); // Importing cheerio to parse HTML
-const path = require('path');
+import express from 'express';
+import fetch from 'node-fetch'; // Importing node-fetch to make API requests
+import cheerio from 'cheerio'; // Importing cheerio to parse HTML
+import path from 'path';
 
 const app = express();
 
