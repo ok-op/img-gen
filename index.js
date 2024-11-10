@@ -21,7 +21,7 @@ app.get('/download', async (req, res) => {
     }
 
     try {
-        const ytDlpWrap = new YTDlpWrap('path/to/yt-dlp/binary');
+        const ytDlpWrap = new YTDlpWrap('./yt-dlp'); // If yt-dlp is in the same directory
 
         // Execute yt-dlp command to download the video
         let ytDlpEventEmitter = ytDlpWrap
@@ -57,7 +57,7 @@ app.get('/metadata', async (req, res) => {
     }
 
     try {
-        const ytDlpWrap = new YTDlpWrap('path/to/yt-dlp/binary');
+        const ytDlpWrap = new YTDlpWrap('./yt-dlp'); // If yt-dlp is in the same directory
         
         let metadata = await ytDlpWrap.getVideoInfo(url);
         console.log(metadata.title);
