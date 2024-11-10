@@ -1,9 +1,11 @@
 const express = require('express');
-const fetch = require('node-fetch'); // Importing node-fetch to make API requests
 const path = require('path');
 
+// Use dynamic import for node-fetch (because it's an ES module)
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;  // Set PORT directly instead of using process.env
 
 // Serve static files directly from the root directory
 app.use(express.static(path.join(__dirname)));
@@ -35,11 +37,6 @@ app.get('/download', async (req, res) => {
         console.error('Error fetching download link:', error);
         res.status(500).json({ error: 'Internal Server Error' });
     }
-});
-
-// Handle the root request to serve the HTML page
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
 });
 
 // Start the Express server
