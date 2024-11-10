@@ -31,8 +31,8 @@ app.get('/download', async (req, res) => {
         const html = await response.text(); // Get the raw HTML content
         const $ = cheerio.load(html); // Parse the HTML with cheerio
 
-        // Extract the download link from the page (Check if it's inside a specific tag or class)
-        const downloadLink = $('a').attr('href'); // Assuming the download link is inside an <a> tag
+        // Look for the download link using a more specific selector (adjust this according to the HTML structure)
+        const downloadLink = $('a.download-btn').attr('href');  // Example, replace with correct class or selector
 
         console.log('Extracted download link:', downloadLink); // Log for debugging
 
