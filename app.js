@@ -5,6 +5,9 @@ const cheerio = require('cheerio'); // Import cheerio for HTML parsing
 const app = express();
 const PORT = 3000;
 
+// Serve static files (including index.html) from the root directory
+app.use(express.static(__dirname));  // __dirname will serve files from the root directory
+
 app.get('/download', async (req, res) => {
     const { url } = req.query;
 
@@ -42,6 +45,11 @@ app.get('/download', async (req, res) => {
         console.error('Error fetching download link:', error);
         res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
+});
+
+// Serve index.html directly from the root directory
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');  // Serve the index.html file
 });
 
 app.listen(PORT, () => {
