@@ -11,6 +11,5 @@
     "node-fetch": "^3.2.0"
   },
   "author": "ok-op",
-  "license": "ISC",
-  "type": "module"  
+  "license": "ISC"
 }
