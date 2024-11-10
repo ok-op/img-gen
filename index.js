@@ -2,7 +2,7 @@ const express = require('express');
 const YTDlpWrap = require('yt-dlp-wrap').default;
 
 const app = express();
-const PORT = process.env.PORT || 3000;
+const PORT = 3000;
 
 // Serve static files from the root directory (index.html)
 app.use(express.static(__dirname));
