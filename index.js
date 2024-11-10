@@ -1,12 +1,13 @@
 const express = require('express');
 const fs = require('fs');
+const path = require('path');
 const YTDlpWrap = require('yt-dlp-wrap').default;
 
 const app = express();
 const PORT = 3000;
 
 // Ensure yt-dlp has execute permission
-const ytDlpPath = './yt-dlp';
+const ytDlpPath = path.join(__dirname, 'yt-dlp'); // Ensure this points to the correct location
 
 // Set execute permission for yt-dlp if not already set
 fs.chmodSync(ytDlpPath, 0o755); // Set execute permission to yt-dlp binary
@@ -40,7 +41,7 @@ app.get('/download', async (req, res) => {
                 console.log(eventType, eventData);
             })
             .on('error', (error) => {
-                console.error(error);
+                console.error('Error executing yt-dlp:', error); // More detailed error logging
                 res.status(500).json({ error: error.message || 'Error occurred while downloading' });
             })
             .on('close', () => {
