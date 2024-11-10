@@ -4,111 +4,92 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video Downloader</title>
-    <!-- Font Awesome for icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
-        /* Global Styles */
+        /* Body Style */
         body {
             font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f4f7fa;
+            background-color: #f4f4f9;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
-            color: #333;
+            margin: 0;
         }
-        
-        /* Centering the form */
+
+        /* Main Container */
         .container {
             background-color: #fff;
+            padding: 30px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            padding: 40px;
-            width: 100%;
-            max-width: 400px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            width: 400px;
             text-align: center;
         }
 
+        /* Heading */
         h1 {
+            color: #4CAF50;
             font-size: 24px;
-            color: #333;
             margin-bottom: 20px;
         }
 
-        /* Input Fields */
+        /* Form Elements */
         input[type="text"] {
-            width: 80%;
-            padding: 12px;
+            width: 90%;
+            padding: 10px;
             margin: 10px 0;
-            border: 1px solid #ccc;
+            border: 2px solid #ddd;
             border-radius: 4px;
-            font-size: 16px;
+            font-size: 14px;
         }
 
-        input[type="text"]:focus {
-            outline: none;
-            border-color: #4CAF50;
-        }
-
-        /* Button Styles */
         button {
+            width: 100%;
+            padding: 10px;
             background-color: #4CAF50;
             color: white;
-            padding: 12px 20px;
             border: none;
             border-radius: 4px;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
-            width: 80%;
-            margin: 15px 0;
-            transition: background-color 0.3s ease;
         }
 
         button:hover {
             background-color: #45a049;
         }
 
-        /* Icon next to button */
-        button i {
-            margin-right: 8px;
-        }
-
-        /* Footer */
-        .footer {
+        /* Download Link */
+        .download-link {
             margin-top: 20px;
-            font-size: 14px;
-            color: #777;
         }
 
-        .footer a {
+        .download-link a {
             color: #4CAF50;
+            font-size: 16px;
             text-decoration: none;
+            font-weight: bold;
         }
 
-        .footer a:hover {
+        .download-link a:hover {
             text-decoration: underline;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1><i class="fas fa-download"></i> Download Video from YouTube, Instagram, or Facebook</h1>
-        
+        <h1>Video Downloader</h1>
         <form action="/download" method="get">
-            <label for="url">Enter Video URL:</label><br>
-            <input type="text" id="url" name="url" placeholder="Paste URL here" required><br><br>
-            
-            <label for="name">Custom Name (optional):</label><br>
-            <input type="text" id="name" name="name" placeholder="Enter custom name for the file"><br><br>
-            
-            <button type="submit"><i class="fas fa-download"></i> Download</button>
+            <input type="text" id="url" name="url" placeholder="Enter Video URL" required>
+            <input type="text" id="name" name="name" placeholder="Custom Video Name (Optional)">
+            <button type="submit">Download</button>
         </form>
 
-        <div class="footer">
-            <p>Need Help? <a href="mailto:support@yourdomain.com">Contact Support</a></p>
+        {% if download_url %}
+        <div class="download-link">
+            <p>Your download is ready:</p>
+            <a href="{{ download_url }}" download>Click here to download the video</a>
         </div>
+        {% endif %}
     </div>
 </body>
 </html>
