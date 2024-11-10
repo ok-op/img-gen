@@ -5,9 +5,6 @@ const cheerio = require('cheerio'); // Import cheerio for HTML parsing
 const app = express();
 const PORT = 3000;
 
-// Serve static files (including index.html) from the root directory
-app.use(express.static(__dirname));  // __dirname will serve files from the root directory
-
 app.get('/download', async (req, res) => {
     const { url } = req.query;
 
@@ -30,8 +27,10 @@ app.get('/download', async (req, res) => {
         const html = await response.text(); // Get the raw HTML content
         const $ = cheerio.load(html); // Parse the HTML with cheerio
 
-        // Extract download link from the page
+        // Extract the download link from the page (Check if it's inside a specific tag or class)
         const downloadLink = $('a').attr('href'); // Assuming the download link is inside an <a> tag
+
+        console.log('Extracted download link:', downloadLink); // Log for debugging
 
         if (downloadLink) {
             res.json({
@@ -45,11 +44,6 @@ app.get('/download', async (req, res) => {
         console.error('Error fetching download link:', error);
         res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
-});
-
-// Serve index.html directly from the root directory
-app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');  // Serve the index.html file
 });
 
 app.listen(PORT, () => {
