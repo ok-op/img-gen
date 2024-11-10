@@ -5,6 +5,10 @@ const cheerio = require('cheerio'); // Import cheerio for HTML parsing
 const app = express();
 const PORT = 3000;
 
+app.get('/', (req, res) => {
+    res.sendFile(__dirname + '/index.html');  // রুট ডিরেক্টরি থেকে index.html ফাইল পাঠাবে
+});
+
 app.get('/download', async (req, res) => {
     const { url } = req.query;
 
