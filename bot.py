@@ -1,6 +1,8 @@
 from flask import Flask, request, render_template, send_from_directory, jsonify
 import os
 import yt_dlp
+import threading
+import time
 
 app = Flask(__name__)
 
@@ -32,6 +34,17 @@ def get_metadata(url):
         info_dict = ydl.extract_info(url, download=False)
         return info_dict
 
+# ফাইল ডিলিট করার ফাংশন (১০ মিনিট পর)
+def delete_file(filepath):
+    """Delete a file after 10 minutes"""
+    time.sleep(600)  # 600 সেকেন্ড = 10 মিনিট
+    try:
+        if os.path.exists(filepath):
+            os.remove(filepath)
+            print(f"File {filepath} deleted after 10 minutes.")
+    except Exception as e:
+        print(f"Error deleting file {filepath}: {e}")
+
 # হোম পেজ রেন্ডার করা
 @app.route('/')
 def index():
@@ -55,6 +68,11 @@ def download():
         
         # কাস্টম নামের সাথে মেটাডেটা পাঠানো
         download_url = f'/downloads/{custom_name}.mp4'
+
+        # ফাইল ডিলিট করার জন্য থ্রেড চালানো (১০ মিনিট পর ডিলিট হবে)
+        filepath = os.path.join(download_folder, f"{custom_name}.mp4")
+        delete_thread = threading.Thread(target=delete_file, args=(filepath,))
+        delete_thread.start()
 
         # হোম পেজে ডাউনলোড লিঙ্ক দেখানো
         return render_template('index.html', download_url=download_url)
