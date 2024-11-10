@@ -7,7 +7,9 @@ const PORT = 3000;
 
 // Ensure yt-dlp has execute permission
 const ytDlpPath = './yt-dlp';
-fs.chmodSync(ytDlpPath, '755'); // Give execute permissions to the yt-dlp binary
+
+// Set execute permission for yt-dlp if not already set
+fs.chmodSync(ytDlpPath, 0o755); // Set execute permission to yt-dlp binary
 
 // Serve static files from the root directory (index.html)
 app.use(express.static(__dirname));
