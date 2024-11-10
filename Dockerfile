@@ -1,24 +1,26 @@
-# Use an official Python image as a base
-FROM python:3.9-slim
+# Use an official Python runtime as a base image
+FROM python:3.9
 
-# Set working directory
+# Set the working directory
 WORKDIR /app
 
-# Install dependencies
-COPY requirements.txt .
-RUN pip install --no-cache-dir -r requirements.txt
-
-# Install yt-dlp
-RUN apt-get update && apt-get install -y yt-dlp
-
-# Ensure yt-dlp has executable permissions
-RUN chmod +x /usr/local/bin/yt-dlp
-
-# Copy the rest of the application code
+# Copy the current directory contents into the container at /app
 COPY . .
 
-# Expose the port the app runs on
+# Install any needed packages specified in requirements.txt
+RUN pip install -r requirements.txt
+
+# Install yt-dlp and set executable permissions
+RUN apt-get update && apt-get install -y yt-dlp && chmod +x /usr/local/bin/yt-dlp
+
+# Create a downloads directory
+RUN mkdir -p /app/downloads
+
+# Set environment variable to production
+ENV FLASK_ENV=production
+
+# Expose the port Flask will run on
 EXPOSE 3000
 
-# Command to run the Python app
-CMD ["python", "bot.py"]
+# Command to run the Flask app
+CMD ["flask", "run", "--host=0.0.0.0", "--port=3000"]
