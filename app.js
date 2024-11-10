@@ -22,8 +22,15 @@ app.get('/download', async (req, res) => {
         // Call the Nyxs API to get the download URL
         const apiUrl = `https://dl.nyxs.pw/api?url=${encodeURIComponent(url)}`;
         const response = await fetch(apiUrl);
-        const data = await response.json();
+        
+        // Check if the response is OK
+        if (!response.ok) {
+            throw new Error(`Error fetching from API: ${response.status} ${response.statusText}`);
+        }
 
+        const data = await response.json();
+        
+        // Check if the response contains the expected download URL
         if (data.status === 'success' && data.download_url) {
             // Send the download URL to the client
             res.json({
@@ -35,7 +42,7 @@ app.get('/download', async (req, res) => {
         }
     } catch (error) {
         console.error('Error fetching download link:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
 });
 
