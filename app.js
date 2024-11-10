@@ -1,22 +1,13 @@
-import express from 'express';
-import fetch from 'node-fetch'; // Importing node-fetch to make API requests
-import cheerio from 'cheerio'; // Importing cheerio to parse HTML
-import path from 'path';
+const express = require('express');
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
+const cheerio = require('cheerio'); // Import cheerio for HTML parsing
 
 const app = express();
+const PORT = 3000;
 
-// Set the port directly
-const PORT = 3000; // Port set directly in the code
+// Static files will now be served directly from the root directory
+// app.use(express.static('public'));  // Removed this line
 
-// Serve static files (like HTML, CSS, JS) from the root directory
-app.use(express.static(path.join(__dirname)));
-
-// Default route to serve your HTML page (index.html)
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Handle file download requests
 app.get('/download', async (req, res) => {
     const { url } = req.query;
 
@@ -25,29 +16,34 @@ app.get('/download', async (req, res) => {
     }
 
     try {
-        // Fetch the HTML of the page using node-fetch
+        // Fetch the page content of the given URL
         const response = await fetch(url);
-        const html = await response.text();
 
-        // Parse the HTML with cheerio to extract the download link
-        const $ = cheerio.load(html);
-        const downloadUrl = $('a#downloadLink').attr('href'); // Adjust the selector as needed
+        // Check if the response is OK
+        if (!response.ok) {
+            throw new Error(`Error fetching from website: ${response.status} ${response.statusText}`);
+        }
 
-        if (downloadUrl) {
+        const html = await response.text(); // Get the raw HTML content
+        const $ = cheerio.load(html); // Parse the HTML with cheerio
+
+        // Assuming the download link is contained in a specific element, e.g., <a> with id 'download-link'
+        const downloadLink = $('#download-link').attr('href');
+
+        if (downloadLink) {
             res.json({
                 message: 'File is ready to download',
-                download_url: downloadUrl
+                download_url: downloadLink
             });
         } else {
-            res.status(400).json({ error: 'Unable to fetch the download link from the page' });
+            res.status(400).json({ error: 'Download link not found on the page' });
         }
     } catch (error) {
         console.error('Error fetching download link:', error);
-        res.status(500).json({ error: 'Internal Server Error' });
+        res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
 });
 
-// Start the Express server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
