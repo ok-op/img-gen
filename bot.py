@@ -13,16 +13,19 @@ if not os.path.exists(download_folder):
 
 # ভিডিও ডাউনলোড করার ফাংশন
 def download_video(url, custom_name="downloaded_video"):
-    # yt-dlp কনফিগারেশন
-    ydl_opts = {
-        'format': 'bestvideo[ext=mp4][vcodec=avc1]+bestaudio/best',  # AVC ফরম্যাট এবং avc1 কোডেক
-        'outtmpl': os.path.join(download_folder, f'{custom_name}.%(ext)s'),
-        'cookiefile': 'cookies.txt',  # কুকি ফাইলের পথ
-    }
+    try:
+        # yt-dlp কনফিগারেশন
+        ydl_opts = {
+            'format': 'bestvideo[ext=mp4][vcodec=avc1]+bestaudio/best',  # AVC ফরম্যাট এবং avc1 কোডেক
+            'outtmpl': os.path.join(download_folder, f'{custom_name}.%(ext)s'),
+            'cookiefile': 'cookies.txt',  # কুকি ফাইলের পথ
+        }
 
-    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-        ydl.download([url])
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            ydl.download([url])
 
+    except Exception as e:
+        print(f"Error downloading video: {e}")
 
 # মেটাডেটা সংগ্রহ করা
 def get_metadata(url):
