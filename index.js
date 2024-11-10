@@ -1,18 +1,18 @@
 const express = require('express');
-const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-const cheerio = require('cheerio'); // Import cheerio for HTML parsing
-const { exec } = require('child_process'); // Import exec to use yt-dlp in shell
+const YTDlpWrap = require('yt-dlp-wrap').default;
 
 const app = express();
-const PORT = process.env.PORT || 3000; // Set PORT from environment or default to 3000
+const PORT = process.env.PORT || 3000;
 
-// Serve static files from the root directory (no need for a 'public' folder)
-app.use(express.static(__dirname));  // Serve files from the current directory
+// Serve static files from the root directory (index.html)
+app.use(express.static(__dirname));
 
+// Route to serve the index page
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');  // রুট ডিরেক্টরি থেকে index.html ফাইল পাঠাবে
+    res.sendFile(__dirname + '/index.html');
 });
 
+// Route to handle video download requests
 app.get('/download', async (req, res) => {
     const { url } = req.query;
 
@@ -21,36 +21,55 @@ app.get('/download', async (req, res) => {
     }
 
     try {
-        // Use yt-dlp to get video download URL
-        const command = `yt-dlp -g ${url}`; // Use yt-dlp to get the video URL (without downloading it)
-        
-        exec(command, (err, stdout, stderr) => {
-            if (err) {
-                console.error('Error executing yt-dlp:', err);
-                return res.status(500).json({ error: 'Error executing yt-dlp' });
-            }
-            if (stderr) {
-                console.error('yt-dlp stderr:', stderr);
-                return res.status(500).json({ error: stderr });
-            }
+        const ytDlpWrap = new YTDlpWrap('path/to/yt-dlp/binary');
 
-            const downloadUrl = stdout.trim(); // yt-dlp returns a URL, so trim it
+        // Execute yt-dlp command to download the video
+        let ytDlpEventEmitter = ytDlpWrap
+            .exec([url, '-f', 'best', '-o', 'output.mp4'])
+            .on('progress', (progress) => {
+                console.log(progress.percent, progress.totalSize, progress.currentSpeed, progress.eta);
+            })
+            .on('ytDlpEvent', (eventType, eventData) => {
+                console.log(eventType, eventData);
+            })
+            .on('error', (error) => {
+                console.error(error);
+                res.status(500).json({ error: error.message || 'Error occurred while downloading' });
+            })
+            .on('close', () => {
+                console.log('Download finished');
+                res.json({ message: 'Download completed', download_url: 'output.mp4' });
+            });
 
-            if (downloadUrl) {
-                res.json({
-                    message: 'File is ready to download',
-                    download_url: downloadUrl
-                });
-            } else {
-                res.status(400).json({ error: 'Download link not found' });
-            }
-        });
+        console.log(ytDlpEventEmitter.ytDlpProcess.pid);
     } catch (error) {
-        console.error('Error fetching download link:', error);
+        console.error('Error:', error);
         res.status(500).json({ error: error.message || 'Internal Server Error' });
     }
 });
 
+// Route to get video metadata
+app.get('/metadata', async (req, res) => {
+    const { url } = req.query;
+
+    if (!url) {
+        return res.status(400).json({ error: 'URL is required' });
+    }
+
+    try {
+        const ytDlpWrap = new YTDlpWrap('path/to/yt-dlp/binary');
+        
+        let metadata = await ytDlpWrap.getVideoInfo(url);
+        console.log(metadata.title);
+
+        res.json({ title: metadata.title, description: metadata.description, uploader: metadata.uploader });
+    } catch (error) {
+        console.error('Error:', error);
+        res.status(500).json({ error: error.message || 'Error fetching video metadata' });
+    }
+});
+
+// Start the server
 app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
