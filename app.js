@@ -1,20 +1,10 @@
 const express = require('express');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-const cheerio = require('cheerio');
-const path = require('path');
+const cheerio = require('cheerio'); // Import cheerio for HTML parsing
 
 const app = express();
 const PORT = 3000;
 
-// Serve static files from the 'public' directory
-app.use(express.static('public'));
-
-// Serve index.html for the root path
-app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
-});
-
-// Handle the /download route to extract download link from URL
 app.get('/download', async (req, res) => {
     const { url } = req.query;
 
@@ -23,19 +13,22 @@ app.get('/download', async (req, res) => {
     }
 
     try {
-        // Fetch the page content from the URL
-        const response = await fetch(url);
+        // Construct the request URL for nyxs.pw service
+        const downloadUrl = `https://dl.nyxs.pw/?url=${encodeURIComponent(url)}`;
+
+        // Fetch the page content of the given URL
+        const response = await fetch(downloadUrl);
 
         // Check if the response is OK
         if (!response.ok) {
-            throw new Error(`Error fetching from website: ${response.status} ${response.statusText}`);
+            throw new Error(`Error fetching from nyxs.pw: ${response.status} ${response.statusText}`);
         }
 
-        const html = await response.text(); // Get raw HTML content
-        const $ = cheerio.load(html); // Parse the HTML using cheerio
+        const html = await response.text(); // Get the raw HTML content
+        const $ = cheerio.load(html); // Parse the HTML with cheerio
 
-        // Get the download link (Ensure the selector is correct)
-        const downloadLink = $('a#download-link').attr('href');
+        // Extract download link from the page
+        const downloadLink = $('a').attr('href'); // Assuming the download link is inside an <a> tag
 
         if (downloadLink) {
             res.json({
