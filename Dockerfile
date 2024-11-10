@@ -1,22 +1,20 @@
-# Step 1: Node.js ইমেজ থেকে বেজ ইমেজ তৈরি
-FROM node:18
+# Python বেস ইমেজ
+FROM python:3.10-slim
 
-# Step 2: অ্যাপ্লিকেশনের জন্য কাজের ডিরেক্টরি সেট করা
+# কাজের ডিরেক্টরি সেট করা
 WORKDIR /app
 
-# Step 3: package.json এবং package-lock.json কপি করে ডিপেনডেন্সি ইনস্টল করা
-COPY package.json ./
-COPY package-lock.json ./
-RUN npm install
+# প্যাকেজ ইনস্টল করতে requirements.txt কপি করা
+COPY requirements.txt /app/
 
-# Step 4: অ্যাপ্লিকেশনের বাকি কোড কপি করা
-COPY . .
+# প্যাকেজ ইনস্টল করা
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Step 5: yt-dlp বাইনারি ডাউনলোড করা এবং ffmpeg ইনস্টল করা
-RUN apt-get update && apt-get install -y ffmpeg
+# সোর্স কোড কপি করা (index.html সহ)
+COPY . /app/
 
-# Step 6: অ্যাপটি যে পোর্টে চলবে তা এক্সপোজ করা
+# পোর্ট এক্সপোজ করা
 EXPOSE 3000
 
-# Step 7: অ্যাপ্লিকেশন চালু করা
-CMD ["node", "index.js"]
+# অ্যাপ্লিকেশন চালানো
+CMD ["python", "bot.py"]
