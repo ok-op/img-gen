@@ -1,7 +1,7 @@
 {
-  "name": "image-generator-app",
+  "name": "videodownloader-app",
   "version": "1.0.0",
-  "description": "An image generator app using HTML, Express.js, and Docker",
+  "description": "A video downloader app using HTML, Express.js, and Docker",
   "main": "app.js",
   "scripts": {
     "start": "node app.js"
