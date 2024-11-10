@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Image Generator</title>
+  <title>AI Image Generator</title>
   <link rel="stylesheet" href="/styles.css"> <!-- Link to CSS file -->
 </head>
 <body>
@@ -11,10 +11,24 @@
     <h1>AI Image Generator</h1>
     <form id="image-form">
       <input type="text" id="prompt" placeholder="Enter your prompt" required>
-      <input type="text" id="model" placeholder="Enter model (e.g., 'stable-diffusion')" required>
-      <input type="text" id="style" placeholder="Enter style (e.g., 'fantasy')" required>
+      
+      <!-- Model Select Dropdown -->
+      <select id="model" required>
+        <option value="juggernautXL_v45">juggernautXL_v45</option>
+        <option value="animagineXLV3_v30">animagineXLV3_v30</option>
+        <option value="dreamshaperXL10_alpha2">dreamshaperXL10_alpha2</option>
+        <option value="dynavisionXL_0411">dynavisionXL_0411</option>
+        <option value="realismEngineSDXL_v10">realismEngineSDXL_v10</option>
+        <option value="realvisxlV40">realvisxlV40</option>
+        <option value="sd_xl_base_1">sd_xl_base_1</option>
+        <option value="turbovisionXL_v431">turbovisionXL_v431</option>
+      </select>
+      
+      <!-- Style Input -->
+      <input type="text" id="style" placeholder="Enter style (e.g., fantasy)" required>
       <button type="submit">Generate Image</button>
     </form>
+    
     <div id="result"></div>
   </div>
 
@@ -23,7 +37,7 @@
       e.preventDefault();
 
       const prompt = document.getElementById("prompt").value;
-      const model = document.getElementById("model").value; // Get model input
+      const model = document.getElementById("model").value; // Get model from dropdown
       const style = document.getElementById("style").value; // Get style input
 
       const response = await fetch(`/generate-image?prompt=${encodeURIComponent(prompt)}&model=${encodeURIComponent(model)}&style=${encodeURIComponent(style)}`);
