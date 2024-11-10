@@ -11,26 +11,16 @@
         <h1>Generate Image from Text</h1>
         <input type="text" id="prompt" placeholder="Enter a description for the image" />
 
-        <!-- Dropdown to select model -->
         <label for="modelSelect">Select Model:</label>
         <select id="modelSelect">
             <option value="animagineXLV3_v30">Animagine XL V3</option>
-            <option value="dreamshaperXL10_alpha2">Dreamshaper XL 10 Alpha 2</option>
+            <option value="dreamshaperXL10_alpha2">Dreamshaper XL Alpha 2</option>
             <option value="dynavisionXL_0411">Dynavision XL 0411</option>
             <option value="juggernautXL_v45">Juggernaut XL V45</option>
             <option value="realismEngineSDXL_v10">Realism Engine SDXL V10</option>
             <option value="realvisxlV40">Realvis XL V40</option>
             <option value="sd_xl_base_1">SD XL Base 1</option>
             <option value="turbovisionXL_v431">Turbovision XL V431</option>
-        </select>
-
-        <!-- Dropdown to select style -->
-        <label for="styleSelect">Select Style:</label>
-        <select id="styleSelect">
-            <option value="realistic">Realistic</option>
-            <option value="abstract">Abstract</option>
-            <option value="anime">Anime</option>
-            <option value="sketch">Sketch</option>
         </select>
 
         <button id="generateBtn">Generate Image</button>
@@ -41,7 +31,6 @@
         document.getElementById('generateBtn').addEventListener('click', async () => {
             const prompt = document.getElementById('prompt').value;
             const selectedModel = document.getElementById('modelSelect').value;
-            const selectedStyle = document.getElementById('styleSelect').value;
 
             if (!prompt) {
                 alert("Please enter a description.");
@@ -49,16 +38,14 @@
             }
 
             try {
-                const apiUrl = `https://api.nyxs.pw/ai-image/image-generator?prompt=${encodeURIComponent(prompt)}&model=${encodeURIComponent(selectedModel)}&style=${encodeURIComponent(selectedStyle)}`;
-
-                const response = await fetch(apiUrl, { 
-                    method: "GET"
+                const response = await fetch(`https://api.nyxs.pw/ai-image/image-generator?prompt=${prompt}&model=${selectedModel}&style=style`, { 
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
                 });
 
                 if (response.ok) {
                     const data = await response.json();
                     const imageUrl = data.image_url;
-
                     if (imageUrl) {
                         document.getElementById('imageContainer').innerHTML = `<img src="${imageUrl}" alt="Generated Image" />`;
                     } else {
