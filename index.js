@@ -1,8 +1,13 @@
 const express = require('express');
+const fs = require('fs');
 const YTDlpWrap = require('yt-dlp-wrap').default;
 
 const app = express();
 const PORT = 3000;
+
+// Ensure yt-dlp has execute permission
+const ytDlpPath = './yt-dlp';
+fs.chmodSync(ytDlpPath, '755'); // Give execute permissions to the yt-dlp binary
 
 // Serve static files from the root directory (index.html)
 app.use(express.static(__dirname));
@@ -21,7 +26,7 @@ app.get('/download', async (req, res) => {
     }
 
     try {
-        const ytDlpWrap = new YTDlpWrap('./yt-dlp'); // If yt-dlp is in the same directory
+        const ytDlpWrap = new YTDlpWrap(ytDlpPath); // If yt-dlp is in the same directory
 
         // Execute yt-dlp command to download the video
         let ytDlpEventEmitter = ytDlpWrap
@@ -57,7 +62,7 @@ app.get('/metadata', async (req, res) => {
     }
 
     try {
-        const ytDlpWrap = new YTDlpWrap('./yt-dlp'); // If yt-dlp is in the same directory
+        const ytDlpWrap = new YTDlpWrap(ytDlpPath); // If yt-dlp is in the same directory
         
         let metadata = await ytDlpWrap.getVideoInfo(url);
         console.log(metadata.title);
