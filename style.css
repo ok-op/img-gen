@@ -20,7 +20,7 @@ h1 {
   color: #333;
 }
 
-input[type="text"], select {
+input[type="text"] {
   padding: 10px;
   margin: 10px;
   border-radius: 4px;
@@ -41,9 +41,22 @@ button:hover {
   background-color: #45a049;
 }
 
-img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-  margin-top: 20px;
+a {
+  color: #4CAF50;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+#result p {
+  color: #333;
+  font-size: 16px;
+}
+
+#result a {
+  margin-top: 10px;
+  display: inline-block;
 }
