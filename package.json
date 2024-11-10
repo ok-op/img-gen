@@ -12,5 +12,5 @@
   },
   "author": "ok-op",
   "license": "ISC",
-  "type": "module"  // Add this line
+  "type": "module"  
 }
