@@ -11,7 +11,7 @@ RUN npm install
 # Step 4: Copy the rest of the app's code
 COPY . .
 
-RUN chmod +x /path/to/yt-dlp
+RUN /yt-dlp
 
 # Step 5: Expose the port the app will run on
 EXPOSE 3000
