@@ -1,15 +1,17 @@
 import express from 'express';
 import fetch from 'node-fetch'; // Using import instead of require
+
 const app = express();
 const PORT = 3000;
 
 app.use(express.static(".")); // Serve static files from the root directory
 
+// Endpoint to generate image based on user input (prompt, model, style)
 app.get("/generate-image", async (req, res) => {
   const { prompt, model, style } = req.query;
 
   try {
-    const response = await fetch(`https://api.nyxs.pw/ai-image/image-generator?prompt=${encodeURIComponent(prompt)}&model=${model}&style=${style}`);
+    const response = await fetch(`https://api.nyxs.pw/ai-image/image-generator?prompt=${encodeURIComponent(prompt)}&model=${encodeURIComponent(model)}&style=${encodeURIComponent(style)}`);
     const data = await response.json();
 
     if (data.status && data.image_url) {
@@ -23,6 +25,7 @@ app.get("/generate-image", async (req, res) => {
   }
 });
 
+// Start the Express server
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
