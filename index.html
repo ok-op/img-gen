@@ -15,6 +15,15 @@
         <label for="modelSelect">Select Model:</label>
         <select id="modelSelect">
             <option value="dall-e-3">DALL-E 3</option>
+            <option value="dall-e-2">DALL-E 2</option>
+            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+            <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+            <option value="gpt-4o-mini">GPT-4o Mini</option>
+            <option value="whisper-1">Whisper 1</option>
+            <option value="gpt-3.5-turbo-instruct">GPT-3.5 Turbo Instruct</option>
+            <option value="babbage-002">Babbage 002</option>
+            <option value="gpt-4o-2024-05-13">GPT-4o 2024-05-13</option>
+            <option value="davinci-002">Davinci 002</option>
             <!-- Add other models as needed -->
         </select>
 
@@ -33,7 +42,7 @@
             }
 
             try {
-                const response = await fetch("https://openai-devsdocode.up.railway.app/generate-image", { 
+                const response = await fetch("https://your-api-endpoint.com/generate-image", { 
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify({ prompt: prompt, model: selectedModel })
