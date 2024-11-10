@@ -19,4 +19,4 @@ RUN apt-get update && apt-get install -y ffmpeg
 EXPOSE 3000
 
 # Step 7: অ্যাপ্লিকেশন চালু করা
-CMD ["npm", "start"]
+CMD ["node", "index.js"]
