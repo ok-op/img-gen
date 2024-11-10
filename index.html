@@ -90,6 +90,12 @@
         .footer a:hover {
             text-decoration: underline;
         }
+
+        /* Hidden div for showing download link */
+        .download-link {
+            margin-top: 20px;
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -105,6 +111,13 @@
             
             <button type="submit"><i class="fas fa-download"></i> Download</button>
         </form>
+
+        {% if download_url %}
+        <div class="download-link">
+            <h3>Your video is ready to download!</h3>
+            <a href="{{ download_url }}" class="btn btn-success" download>Click here to download</a>
+        </div>
+        {% endif %}
 
         <div class="footer">
             <p>Need Help? <a href="mailto:support@yourdomain.com">Contact Support</a></p>
