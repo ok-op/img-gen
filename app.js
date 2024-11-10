@@ -3,7 +3,7 @@ const fetch = require("node-fetch");
 const app = express();
 const PORT = 3000;
 
-app.use(express.static("public")); // Serve static files (HTML, CSS, JS)
+app.use(express.static(".")); // Serve static files from the root directory
 
 app.get("/generate-image", async (req, res) => {
   const { prompt, model, style } = req.query;
