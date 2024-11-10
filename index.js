@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = process.env.PORT || 3000;  // PORT পরিবেশ ভেরিয়েবল ব্যবহার করা
+const PORT = 3000;  // PORT পরিবেশ ভেরিয়েবল ব্যবহার করা
 
 // yt-dlp বাইনারি সেটআপ
 const ytDlpWrapInstance = new YTDlpWrap();
