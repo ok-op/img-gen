@@ -1,13 +1,20 @@
 const express = require('express');
 const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
-const cheerio = require('cheerio'); // Import cheerio for HTML parsing
+const cheerio = require('cheerio');
+const path = require('path');
 
 const app = express();
 const PORT = 3000;
 
-// Static files will now be served directly from the root directory
-// app.use(express.static('public'));  // Removed this line
+// Serve static files from the 'public' directory
+app.use(express.static('public'));
 
+// Serve index.html for the root path
+app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Handle the /download route to extract download link from URL
 app.get('/download', async (req, res) => {
     const { url } = req.query;
 
@@ -16,7 +23,7 @@ app.get('/download', async (req, res) => {
     }
 
     try {
-        // Fetch the page content of the given URL
+        // Fetch the page content from the URL
         const response = await fetch(url);
 
         // Check if the response is OK
@@ -24,11 +31,11 @@ app.get('/download', async (req, res) => {
             throw new Error(`Error fetching from website: ${response.status} ${response.statusText}`);
         }
 
-        const html = await response.text(); // Get the raw HTML content
-        const $ = cheerio.load(html); // Parse the HTML with cheerio
+        const html = await response.text(); // Get raw HTML content
+        const $ = cheerio.load(html); // Parse the HTML using cheerio
 
-        // Assuming the download link is contained in a specific element, e.g., <a> with id 'download-link'
-        const downloadLink = $('#download-link').attr('href');
+        // Get the download link (Ensure the selector is correct)
+        const downloadLink = $('a#download-link').attr('href');
 
         if (downloadLink) {
             res.json({
