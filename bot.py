@@ -1,4 +1,4 @@
-from flask import Flask, request, render_template, send_file, jsonify
+from flask import Flask, request, render_template, send_from_directory, jsonify
 import os
 import yt_dlp
 
@@ -13,7 +13,7 @@ if not os.path.exists(download_folder):
 def download_video(url, custom_name="downloaded_video"):
     # yt-dlp কনফিগারেশন
     ydl_opts = {
-        'format': 'best',
+        'format': 'bestvideo+bestaudio/best',
         'outtmpl': os.path.join(download_folder, f'{custom_name}.%(ext)s'),
         'cookiefile': 'cookies.txt',  # কুকি ফাইলের পথ
     }
@@ -21,8 +21,21 @@ def download_video(url, custom_name="downloaded_video"):
     with yt_dlp.YoutubeDL(ydl_opts) as ydl:
         ydl.download([url])
 
-    # ফাইল পাথ রিটার্ন করা
-    return os.path.join(download_folder, f'{custom_name}.mp4')
+# মেটাডেটা সংগ্রহ করা
+def get_metadata(url):
+    ydl_opts = {
+        'quiet': True,
+        'extract_flat': False,  # ভিডিও মেটাডেটা সহ পুরো তথ্য সংগ্রহ করা
+    }
+
+    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+        info_dict = ydl.extract_info(url, download=False)
+        return info_dict
+
+# হোম পেজ রেন্ডার করা
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 # ডাউনলোড রুট
 @app.route('/download', methods=['GET'])
@@ -34,14 +47,31 @@ def download():
         return "URL is required", 400
 
     try:
-        # ভিডিও ডাউনলোড এবং ফাইল পাথ সংগ্রহ
-        file_path = download_video(url, custom_name)
+        # ভিডিও ডাউনলোড
+        download_video(url, custom_name)
 
-        # ফাইলটি ডাউনলোড হিসেবে রিটার্ন করা
-        return send_file(file_path, as_attachment=True)
+        # মেটাডেটা সংগ্রহ
+        metadata = get_metadata(url)
+        
+        # কাস্টম নামের সাথে মেটাডেটা পাঠানো
+        download_url = f'/downloads/{custom_name}.mp4'
+
+        # মেটাডেটা থেকে তথ্য পাঠানো
+        return render_template(
+            'index.html', 
+            download_url=download_url, 
+            title=metadata.get('title', 'No Title'),
+            uploader=metadata.get('uploader', 'Unknown'),
+            description=metadata.get('description', 'No Description')
+        )
 
     except Exception as e:
         return str(e), 500
+
+# ডাউনলোড ফাইল সার্ভিং
+@app.route('/downloads/<filename>')
+def download_file(filename):
+    return send_from_directory(download_folder, filename)
 
 if __name__ == '__main__':
     app.run(debug=True, port=3000)
