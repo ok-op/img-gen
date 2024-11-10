@@ -50,20 +50,11 @@ def download():
         # ভিডিও ডাউনলোড
         download_video(url, custom_name)
 
-        # মেটাডেটা সংগ্রহ
-        metadata = get_metadata(url)
-        
-        # কাস্টম নামের সাথে মেটাডেটা পাঠানো
+        # ডাইরেক্ট ডাউনলোড লিংক তৈরি করা
         download_url = f'/downloads/{custom_name}.mp4'
 
-        # মেটাডেটা থেকে তথ্য পাঠানো
-        return render_template(
-            'index.html', 
-            download_url=download_url, 
-            title=metadata.get('title', 'No Title'),
-            uploader=metadata.get('uploader', 'Unknown'),
-            description=metadata.get('description', 'No Description')
-        )
+        # হোম পেজে ডাউনলোড লিঙ্ক দেখানো
+        return render_template('index.html', download_url=download_url)
 
     except Exception as e:
         return str(e), 500
