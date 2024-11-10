@@ -19,11 +19,6 @@
             <option value="gpt-4-turbo">GPT-4 Turbo</option>
             <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
             <option value="gpt-4o-mini">GPT-4o Mini</option>
-            <option value="whisper-1">Whisper 1</option>
-            <option value="gpt-3.5-turbo-instruct">GPT-3.5 Turbo Instruct</option>
-            <option value="babbage-002">Babbage 002</option>
-            <option value="gpt-4o-2024-05-13">GPT-4o 2024-05-13</option>
-            <option value="davinci-002">Davinci 002</option>
         </select>
 
         <button id="generateBtn">Generate Image</button>
@@ -41,14 +36,14 @@
             }
 
             try {
-                // Replace with the actual API URL
                 const apiUrl = "https://openai-devsdocode.up.railway.app/generate-image";
                 
+                console.log("Sending request to API...");
                 const response = await fetch(apiUrl, { 
                     method: "POST",
                     headers: { 
                         "Content-Type": "application/json",
-                        // Add any required authentication headers, e.g.:
+                        // Uncomment below if you need authentication
                         // "Authorization": "Bearer YOUR_API_KEY"
                     },
                     body: JSON.stringify({ 
@@ -56,6 +51,8 @@
                         model: selectedModel 
                     })
                 });
+
+                console.log("Response status:", response.status);
 
                 if (response.ok) {
                     const data = await response.json();
