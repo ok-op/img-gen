@@ -1,9 +1,9 @@
 const express = require("express");
-const fetch = require("node-fetch"); // Make sure 'node-fetch' is installed in your package.json
+const fetch = require("node-fetch");
 const app = express();
 const PORT = 3000;
 
-app.use(express.static("public")); // Serve HTML and other static files from 'public' folder
+app.use(express.static("public")); // Serve static files (HTML, CSS, JS)
 
 app.get("/generate-image", async (req, res) => {
   const { prompt, model, style } = req.query;
