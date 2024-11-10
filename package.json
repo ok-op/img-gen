@@ -1,17 +1,13 @@
 {
-  "name": "video-downloader",
+  "name": "yt-dlp-download-app",
   "version": "1.0.0",
-  "description": "A simple video downloader using yt-dlp",
+  "description": "App to download videos using yt-dlp",
   "main": "index.js",
   "scripts": {
     "start": "node index.js"
   },
   "dependencies": {
-    "express": "^4.18.2",
-    "yt-dlp-wrap": "^2.3.12",
-    "node-fetch": "^2.6.1",
-    "cheerio": "^1.0.0-rc.12"
-  },
-  "author": "Your Name",
-  "license": "ISC"
+    "express": "^4.17.3",
+    "yt-dlp-wrap": "^1.0.0"
+  }
 }
