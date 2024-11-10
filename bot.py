@@ -33,27 +33,22 @@ def get_metadata(url):
         return info_dict
 
 # হোম পেজ রেন্ডার করা
-@app.route('/')
-def index():
-    return render_template('index.html')
-
-# ডাউনলোড রুট
 @app.route('/download', methods=['GET'])
 def download():
     url = request.args.get('url')
-    custom_name = request.args.get('name', 'downloaded_video')  # ইউজার যদি কাস্টম নাম দেয়
+    custom_name = request.args.get('name', 'downloaded_video')  # ইউজার যদি কাস্টম নাম দিয়ে থাকে
 
     if not url:
         return "URL is required", 400
 
     try:
-        # ভিডিও ডাউনলোড
+        # ভিডিও ডাউনলোড এবং ফাইল সেভ করা
         download_video(url, custom_name)
 
-        # ডাইরেক্ট ডাউনলোড লিংক তৈরি করা
+        # ফাইলের ডাউনলোড লিংক তৈরি
         download_url = f'/downloads/{custom_name}.mp4'
 
-        # হোম পেজে ডাউনলোড লিঙ্ক দেখানো
+        # HTML টেমপ্লেটে ডাউনলোড লিংক পাঠানো
         return render_template('index.html', download_url=download_url)
 
     except Exception as e:
