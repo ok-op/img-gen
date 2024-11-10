@@ -3,36 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Image Generator</title>
+    <title>Generate Image</title>
+    <link rel="stylesheet" href="/styles.css">
 </head>
 <body>
-    <h1>Generate Image from Text</h1>
-    <input type="text" id="prompt" placeholder="Enter a description for the image" />
-    <button id="generateBtn">Generate Image</button>
-    <div id="imageContainer"></div>
+    <div>
+        <h1>Generate Image from Text</h1>
+        <form id="imageForm">
+            <input type="text" id="prompt" placeholder="Enter description" required /><br>
+            <select id="model" required>
+                <option value="juggernautXL_v45">JuggernautXL_v45</option>
+                <option value="realismEngineSDXL_v10">RealismEngineSDXL_v10</option>
+                <option value="animagineXLV3_v30">AnimagineXLV3_v30</option>
+            </select><br>
+            <select id="style" required>
+                <option value="realism">Realism</option>
+                <option value="cartoon">Cartoon</option>
+            </select><br>
+            <button type="submit">Generate Image</button>
+        </form>
+
+        <div id="imageContainer"></div>
+    </div>
 
     <script>
-        document.getElementById('generateBtn').addEventListener('click', async () => {
-            const prompt = document.getElementById('prompt').value;
-            const model = "juggernautXL_v45";  // Use a valid model here
-            const style = "your_style";  // Set a style if required
+        document.getElementById("imageForm").addEventListener("submit", async function (e) {
+            e.preventDefault();
 
-            if (!prompt) {
-                alert("Please enter a description.");
-                return;
-            }
+            const prompt = document.getElementById("prompt").value;
+            const model = document.getElementById("model").value;
+            const style = document.getElementById("style").value;
 
-            try {
-                const response = await fetch(`/generate-image?prompt=${encodeURIComponent(prompt)}&model=${model}&style=${style}`);
-                const data = await response.json();
-                if (data.image_url) {
-                    document.getElementById('imageContainer').innerHTML = `<img src="${data.image_url}" alt="Generated Image" />`;
-                } else {
-                    document.getElementById('imageContainer').innerHTML = "<p>Image generation failed. Please try again.</p>";
-                }
-            } catch (error) {
-                console.error("Fetch Error:", error);
-                document.getElementById('imageContainer').innerHTML = `<p>Error: ${error.message}</p>`;
+            const response = await fetch(`/generate-image?prompt=${encodeURIComponent(prompt)}&model=${model}&style=${style}`);
+            const data = await response.json();
+
+            if (data.image_url) {
+                document.getElementById("imageContainer").innerHTML = `<img src="${data.image_url}" alt="Generated Image" />`;
+            } else {
+                document.getElementById("imageContainer").innerHTML = "<p>Image generation failed. Please try again.</p>";
             }
         });
     </script>
