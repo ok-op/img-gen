@@ -4,7 +4,7 @@ const fs = require('fs');
 const path = require('path');
 
 const app = express();
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;  // PORT পরিবেশ ভেরিয়েবল ব্যবহার করা
 
 // yt-dlp বাইনারি সেটআপ
 const ytDlpWrapInstance = new YTDlpWrap();
@@ -35,13 +35,17 @@ app.get('/download', async (req, res) => {
 
   try {
     // yt-dlp কমান্ড এক্সিকিউট করা
-    await ytDlpWrapInstance.exec([url, '-f', 'best', '-o', outputPath]);
+    const result = await ytDlpWrapInstance.exec([url, '-f', 'best', '-o', outputPath]);
 
-    // ভিডিও ডাউনলোড সম্পন্ন হলে
-    res.json({
-      message: 'Download completed',
-      download_url: `/downloads/output.mp4`,
-    });
+    if (result) {
+      // ভিডিও ডাউনলোড সম্পন্ন হলে
+      res.json({
+        message: 'Download completed',
+        download_url: `/downloads/output.mp4`,
+      });
+    } else {
+      res.status(500).json({ error: 'Error occurred while downloading the video' });
+    }
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Error occurred while downloading the video' });
