@@ -16,8 +16,9 @@ RUN apt-get update && apt-get install -y yt-dlp && chmod +x /usr/local/bin/yt-dl
 # Create a downloads directory
 RUN mkdir -p /app/downloads
 
-# Set environment variable to production
+# Set environment variables for Flask
 ENV FLASK_ENV=production
+ENV FLASK_APP=bot.py
 
 # Expose the port Flask will run on
 EXPOSE 3000
