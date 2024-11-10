@@ -1,0 +1,14 @@
+{
+  "name": "image-generator-app",
+  "version": "1.0.0",
+  "description": "An image generator app using HTML, Express.js, and Docker",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2"
+  },
+  "author": "ok-op",
+  "license": "ISC"
+}
