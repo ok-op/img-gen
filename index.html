@@ -14,9 +14,14 @@
         <!-- Dropdown to select model -->
         <label for="modelSelect">Select Model:</label>
         <select id="modelSelect">
-            <option value="dall-e-3">DALL-E 3</option>
-            <option value="dall-e-2">DALL-E 2</option>
-            <option value="gpt-4-turbo">GPT-4 Turbo</option>
+            <option value="animagineXLV3_v30">Animagine XL V3</option>
+            <option value="dreamshaperXL10_alpha2">Dreamshaper XL 10 Alpha 2</option>
+            <option value="dynavisionXL_0411">Dynavision XL 0411</option>
+            <option value="juggernautXL_v45">Juggernaut XL V45</option>
+            <option value="realismEngineSDXL_v10">Realism Engine SDXL V10</option>
+            <option value="realvisxlV40">Realvis XL V40</option>
+            <option value="sd_xl_base_1">SD XL Base 1</option>
+            <option value="turbovisionXL_v431">Turbovision XL V431</option>
         </select>
 
         <!-- Dropdown to select style -->
@@ -44,7 +49,6 @@
             }
 
             try {
-                // আপনার দেয়া API URL অনুযায়ী API রিকুয়েস্টটি তৈরি করা হয়েছে
                 const apiUrl = `https://api.nyxs.pw/ai-image/image-generator?prompt=${encodeURIComponent(prompt)}&model=${encodeURIComponent(selectedModel)}&style=${encodeURIComponent(selectedStyle)}`;
 
                 const response = await fetch(apiUrl, { 
@@ -53,7 +57,7 @@
 
                 if (response.ok) {
                     const data = await response.json();
-                    const imageUrl = data.image_url;  // Assuming the API returns image_url in JSON
+                    const imageUrl = data.image_url;
 
                     if (imageUrl) {
                         document.getElementById('imageContainer').innerHTML = `<img src="${imageUrl}" alt="Generated Image" />`;
