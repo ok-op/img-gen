@@ -8,7 +8,7 @@
 </head>
 <body>
   <div class="container">
-    <h1>Nyxs File Downloader</h1>
+    <h1>File Downloader</h1>
     <form id="download-form">
       <input type="text" id="file-url" placeholder="Enter the file URL" required>
       <button type="submit">Download</button>
@@ -24,24 +24,21 @@
       const fileUrl = document.getElementById("file-url").value;
       const resultDiv = document.getElementById("result");
 
-      // Validate URL input
       if (!fileUrl) {
         resultDiv.innerHTML = "<p>Please enter a valid URL.</p>";
         return;
       }
 
-      // Call the Nyxs API to get download link
-      const response = await fetch(`https://dl.nyxs.pw/api?url=${encodeURIComponent(fileUrl)}`);
+      const response = await fetch(`/download?url=${encodeURIComponent(fileUrl)}`);
       const data = await response.json();
 
-      // Check if the API returns a valid download URL
-      if (data.status === "success" && data.download_url) {
+      if (data.download_url) {
         resultDiv.innerHTML = `
-          <p>File ready to download!</p>
+          <p>File is ready to download!</p>
           <a href="${data.download_url}" target="_blank">Click here to download</a>
         `;
       } else {
-        resultDiv.innerHTML = `<p>Error: ${data.message || 'Failed to get the download link'}</p>`;
+        resultDiv.innerHTML = `<p>Error: ${data.error || 'Failed to get the download link'}</p>`;
       }
     });
   </script>
