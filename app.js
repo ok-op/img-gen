@@ -1,6 +1,6 @@
-import express from 'express';
-import fetch from 'node-fetch'; // Importing node-fetch to make API requests
-import path from 'path';
+const express = require('express');
+const fetch = require('node-fetch'); // Importing node-fetch to make API requests
+const path = require('path');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
