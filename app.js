@@ -37,7 +37,7 @@ app.get('/download', async (req, res) => {
     }
 });
 
-// Serve index.html at the root URL
+// Handle the root request to serve the HTML page
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
