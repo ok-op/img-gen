@@ -4,6 +4,9 @@ FROM python:3.10-slim
 # কাজের ডিরেক্টরি সেট করা
 WORKDIR /app
 
+# Assume you download yt-dlp to /app
+RUN chmod +x /app/yt-dlp
+
 # প্যাকেজ ইনস্টল করতে requirements.txt কপি করা
 COPY requirements.txt /app/
 
