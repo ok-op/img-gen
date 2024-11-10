@@ -6,10 +6,10 @@ const path = require('path');
 const app = express();
 const PORT = 3000;
 
-// yt-dlp binary path, সাধারণত yt-dlp-wrap এটি নিজে নিজেই handle করে।
-const ytDlpWrapInstance = new YTDlpWrap();
+// yt-dlp-wrap ইনস্ট্যান্স
+const ytDlpWrap = new YTDlpWrap();
 
-// downloads ফোল্ডার তৈরি করুন যদি এটি না থাকে
+// downloads ডিরেক্টরি তৈরি করে যদি না থাকে
 const downloadsDir = path.join(__dirname, 'downloads');
 if (!fs.existsSync(downloadsDir)) {
   fs.mkdirSync(downloadsDir);
@@ -17,12 +17,12 @@ if (!fs.existsSync(downloadsDir)) {
 
 app.use(express.static(__dirname));
 
-// Serve the index page
+// মূল পেজ প্রদর্শন
 app.get('/', (req, res) => {
   res.sendFile(__dirname + '/index.html');
 });
 
-// Route to handle video download requests
+// ভিডিও ডাউনলোডের জন্য রুট
 app.get('/download', async (req, res) => {
   const { url } = req.query;
 
@@ -33,32 +33,28 @@ app.get('/download', async (req, res) => {
   const outputFilePath = path.join(downloadsDir, `${Date.now()}_output.mp4`);
 
   try {
-    ytDlpWrapInstance
-      .exec([url, '-f', 'best', '-o', outputFilePath])
-      .on('progress', (progress) => {
-        console.log(progress.percent, progress.totalSize, progress.currentSpeed, progress.eta);
-      })
-      .on('error', (error) => {
-        console.error(error);
-        res.status(500).json({ error: 'Error occurred while downloading' });
-      })
-      .on('close', () => {
-        console.log('Download finished');
-        res.download(outputFilePath, 'video.mp4', (err) => {
-          if (err) {
-            console.error('Error sending file:', err);
-          }
-          // Download সম্পন্ন হলে ফাইলটি ডিলিট করুন
-          fs.unlinkSync(outputFilePath);
-        });
+    const ytDlpProcess = ytDlpWrap.execPromise([url, '-f', 'best', '-o', outputFilePath]);
+
+    ytDlpProcess.then(() => {
+      console.log('Download finished');
+      res.download(outputFilePath, 'video.mp4', (err) => {
+        if (err) {
+          console.error('Error sending file:', err);
+        }
+        // ডাউনলোড শেষ হলে ফাইল মুছে দিন
+        fs.unlinkSync(outputFilePath);
       });
+    }).catch((error) => {
+      console.error('Download error:', error);
+      res.status(500).json({ error: 'Failed to download video' });
+    });
   } catch (error) {
     console.error('Error:', error);
     res.status(500).json({ error: 'Internal Server Error' });
   }
 });
 
-// Route to get video metadata
+// মেটাডেটা পাওয়ার জন্য রুট
 app.get('/metadata', async (req, res) => {
   const { url } = req.query;
 
@@ -67,11 +63,12 @@ app.get('/metadata', async (req, res) => {
   }
 
   try {
-    const metadata = await ytDlpWrapInstance.getVideoInfo(url);
+    const metadata = await ytDlpWrap.getVideoInfo(url);
     res.json({
       title: metadata.title,
       description: metadata.description,
       uploader: metadata.uploader,
+      duration: metadata.duration,
     });
   } catch (error) {
     console.error('Error:', error);
@@ -79,7 +76,7 @@ app.get('/metadata', async (req, res) => {
   }
 });
 
-// Start the server
+// সার্ভার শুরু
 app.listen(PORT, () => {
   console.log(`Server is running on http://localhost:${PORT}`);
 });
