@@ -54,13 +54,11 @@ def download():
         metadata = get_metadata(url)
         
         # কাস্টম নামের সাথে মেটাডেটা পাঠানো
-        return jsonify({
-            'message': 'Download completed',
-            'download_url': f'/downloads/{custom_name}.mp4',
-            'title': metadata.get('title', 'No Title'),
-            'uploader': metadata.get('uploader', 'Unknown'),
-            'description': metadata.get('description', 'No Description')
-        })
+        download_url = f'/downloads/{custom_name}.mp4'
+
+        # হোম পেজে ডাউনলোড লিঙ্ক দেখানো
+        return render_template('index.html', download_url=download_url)
+
     except Exception as e:
         return str(e), 500
 
