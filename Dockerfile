@@ -13,12 +13,13 @@ RUN apt-get update && apt-get install -y yt-dlp && chmod +x /usr/local/bin/yt-dl
 # Create a downloads directory
 RUN mkdir -p /app/downloads && chmod -R 777 /app/downloads
 
+# Copy the current directory contents into the container at /app
+COPY . .
+
 # Set environment variables for Flask
 ENV FLASK_ENV=production
 ENV FLASK_APP=bot.py
 
-# Copy the current directory contents into the container at /app
-COPY . .
 
 # Expose the port Flask will run on
 EXPOSE 3000
