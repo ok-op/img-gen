@@ -2,6 +2,7 @@ from flask import Flask, request, render_template, send_from_directory, jsonify
 import os
 import yt_dlp
 import threading
+import time
 
 app = Flask(__name__)
 
@@ -13,17 +14,13 @@ if not os.path.exists(download_folder):
 # ভিডিও ডাউনলোড করার ফাংশন
 def download_video(url, custom_name="downloaded_video"):
     try:
-        # কুকি ফাইলের সঠিক পাথ
-        cookie_file = os.path.join(os.path.dirname(__file__), 'templates', 'cookies.txt')
-
         # yt-dlp কনফিগারেশন
         ydl_opts = {
             'format': 'bestvideo[ext=mp4][vcodec=avc1]+bestaudio/best',  # AVC ফরম্যাট এবং avc1 কোডেক
-            'outtmpl': os.path.join(download_folder, f'{custom_name}.%(ext)s'),  # ফাইল নামের সাথে এক্সটেনশন সহ
-            'cookiefile': cookie_file,  # কুকি ফাইলের পাথ যুক্ত করুন
+            'outtmpl': os.path.join(download_folder, f'{custom_name}.%(ext)s'),
+            'cookiefile': 'cookies.txt',  # কুকি ফাইলের পথ
         }
 
-        # ইউটিউব URL ফাংশনের আর্গুমেন্ট থেকে নেয়া
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
 
@@ -44,7 +41,7 @@ def get_metadata(url):
 # ফাইল ডিলিট করার ফাংশন (১০ মিনিট পর)
 def delete_file(filepath):
     """Delete a file after 10 minutes"""
-    threading.Event().wait(600)  # Wait for 10 minutes
+    time.sleep(600)  # 600 সেকেন্ড = 10 মিনিট
     try:
         if os.path.exists(filepath):
             os.remove(filepath)
@@ -96,10 +93,5 @@ def download_file(filename):
         as_attachment=True  # এটি নিশ্চিত করবে যে ফাইলটি ব্রাউজারের মধ্যে ডাউনলোড হবে
     )
 
-# স্বাস্থ্য পরীক্ষা রুট
-@app.route('/health', methods=['GET'])
-def health_check():
-    return jsonify(status='OK'), 200
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=3000)
+    app.run(debug=True, port=3000)
