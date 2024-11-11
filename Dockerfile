@@ -4,11 +4,14 @@ FROM python:3.9
 # Set the working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . .
+# Copy only the requirements file first to leverage Docker cache
+COPY requirements.txt .
 
 # Install any needed packages specified in requirements.txt
-RUN pip install -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Now copy the rest of the code
+COPY . .
 
 # Install yt-dlp and set executable permissions
 RUN apt-get update && apt-get install -y yt-dlp && chmod +x /usr/local/bin/yt-dlp
