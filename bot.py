@@ -93,5 +93,6 @@ def download_file(filename):
         as_attachment=True  # এটি নিশ্চিত করবে যে ফাইলটি ব্রাউজারের মধ্যে ডাউনলোড হবে
     )
 
+# ডিপ্লয়মেন্টের জন্য Flask অ্যাপ চালানো
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=3000)
