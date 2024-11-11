@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Video Downloader</title>
+    <title>Insta Fb Tiktok Video Downloader</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
         /* Body Style */
@@ -15,6 +15,26 @@
             align-items: center;
             height: 100vh;
             margin: 0;
+            flex-direction: column; /* Aligns content in column direction */
+        }
+
+        /* Header Style */
+        header {
+            text-align: center;
+            margin-top: 30px; /* gap from the top */
+            margin-bottom: 20px; /* gap from the bottom */
+        }
+
+        .logo {
+            width: 300px;  /* Setting the size of the logo */
+            height: 100px;
+            object-fit: contain; /* Ensures the logo is properly scaled */
+        }
+
+        .title {
+            color: #4CAF50;
+            font-size: 18px;
+            margin-top: 10px;
         }
 
         /* Main Container */
@@ -108,6 +128,11 @@
     </style>
 </head>
 <body>
+    <header>
+        <img src="https://i.imgur.com/fwkZmGq.png" alt="Logo" class="logo">
+        <h1 class="title">Paste your encoded Python code in the box below.</h1>
+    </header>
+
     <div class="container">
         <h1>Video Downloader</h1>
         <form action="/download" method="get">
@@ -125,7 +150,7 @@
     </div>
 
     <footer>
-        <p>Made with ❤️ by <a href="https://yourwebsite.com" target="_blank">Your Name</a></p>
+        <p>Made with ❤️ by <a href="https://yourwebsite.com" target="_blank">WOODcraft</a></p>
     </footer>
 </body>
-</html>
+    </html>
