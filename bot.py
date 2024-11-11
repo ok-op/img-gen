@@ -11,20 +11,25 @@ download_folder = 'downloads'
 if not os.path.exists(download_folder):
     os.makedirs(download_folder)
 
+# ডাউনলোড ফোল্ডার তৈরি করা
+download_folder = 'downloads'
+if not os.path.exists(download_folder):
+    os.makedirs(download_folder)
+
 # ভিডিও ডাউনলোড করার ফাংশন
 def download_video(url, custom_name="downloaded_video"):
     try:
+        # কুকি ফাইলের সঠিক পাথ
+        cookie_file = os.path.join(os.path.dirname(__file__), 'templates', 'cookies.txt')
+
         # yt-dlp কনফিগারেশন
-        cookie_file = os.path.join(os.path.dirname(__file__), 'templates', 'cookies.txt')  # সঠিক পাথ দেওয়ার জন্য
-        
         ydl_opts = {
             'format': 'bestvideo[ext=mp4][vcodec=avc1]+bestaudio/best',  # AVC ফরম্যাট এবং avc1 কোডেক
             'outtmpl': os.path.join(download_folder, f'{custom_name}.%(ext)s'),
             'cookiefile': cookie_file,  # কুকি ফাইলের পাথ যুক্ত করুন
         }
 
-        url = 'https://www.youtube.com/watch?v=example_video_id'
-
+        # ইউটিউব URL ফাংশনের আর্গুমেন্ট থেকে নেয়া
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([url])
 
