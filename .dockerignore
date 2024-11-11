@@ -5,5 +5,3 @@ __pycache__/
 .Python
 *.pytest_cache/
 *.log
-.git/
-downloads/
