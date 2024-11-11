@@ -4,9 +4,6 @@ FROM python:3.9
 # Set the working directory
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
-COPY . .
-
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
@@ -19,6 +16,9 @@ RUN mkdir -p /app/downloads && chmod -R 777 /app/downloads
 # Set environment variables for Flask
 ENV FLASK_ENV=production
 ENV FLASK_APP=bot.py
+
+# Copy the current directory contents into the container at /app
+COPY . .
 
 # Expose the port Flask will run on
 EXPOSE 3000
