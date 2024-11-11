@@ -24,5 +24,6 @@ RUN mkdir -p /app/downloads && chmod -R 777 /app/downloads
 # Expose the port Flask will run on
 EXPOSE 3000
 
-# Command to run the Flask app
-CMD ["python", "bot.py"]
+# Set Flask environment variables and run the app
+ENV FLASK_ENV=development
+CMD ["flask", "run", "--host=0.0.0.0", "--port=3000"]
