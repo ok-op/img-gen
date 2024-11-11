@@ -102,6 +102,10 @@ def download_file(filename):
         as_attachment=True  # এটি নিশ্চিত করবে যে ফাইলটি ব্রাউজারের মধ্যে ডাউনলোড হবে
     )
 
+@app.route('/health', methods=['GET'])
+def health_check():
+    return jsonify(status='OK'), 200
+    
 if __name__ == '__main__':
     port = int(os.getenv("PORT", 3000))
     app.run(debug=False, host="0.0.0.0", port=port)
