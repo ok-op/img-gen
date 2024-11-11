@@ -3,12 +3,6 @@ import os
 import yt_dlp
 import threading
 
-# Set environment variables directly in the code
-os.environ['FLASK_ENV'] = 'production'
-os.environ['FLASK_APP'] = 'bot.py'
-os.environ['FLASK_RUN_HOST'] = '0.0.0.0'
-os.environ['FLASK_RUN_PORT'] = '3000'
-
 app = Flask(__name__)
 
 # ডাউনলোড ফোল্ডার তৈরি করা
@@ -50,7 +44,6 @@ def get_metadata(url):
 # ফাইল ডিলিট করার ফাংশন (১০ মিনিট পর)
 def delete_file(filepath):
     """Delete a file after 10 minutes"""
-    # Instead of blocking, we could schedule a background task
     threading.Event().wait(600)  # Wait for 10 minutes
     try:
         if os.path.exists(filepath):
@@ -107,6 +100,6 @@ def download_file(filename):
 @app.route('/health', methods=['GET'])
 def health_check():
     return jsonify(status='OK'), 200
-    
+
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=3000)
