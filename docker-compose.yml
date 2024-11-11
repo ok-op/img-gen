@@ -1,12 +1,17 @@
 version: '3.8'
 
 services:
-  web-app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+  web:
+    build: .
+    container_name: woodcraft-app
     ports:
       - "3000:3000"
-    restart: always
     volumes:
       - .:/app  
+    networks:
+      - web-network
+    restart: always  
+
+networks:
+  web-network:
+    driver: bridge
