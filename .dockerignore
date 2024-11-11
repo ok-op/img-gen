@@ -16,7 +16,6 @@ venv/
 
 # Git and version control folders
 .git/
-.gitignore
 
 # Docker files (don't include the Dockerfile or .dockerignore itself in the image)
 Dockerfile
