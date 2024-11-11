@@ -1,20 +1,27 @@
-# Python বেস ইমেজ
-FROM python:3.10-slim
+# Use an official Python runtime as a base image
+FROM python:3.9
 
-# কাজের ডিরেক্টরি সেট করা
+# Set the working directory
 WORKDIR /app
 
-# প্যাকেজ ইনস্টল করতে requirements.txt কপি করা
-COPY requirements.txt /app/
+# Copy the current directory contents into the container at /app
+COPY . .
 
-# প্যাকেজ ইনস্টল করা
-RUN pip install --no-cache-dir -r requirements.txt
+# Install any needed packages specified in requirements.txt
+RUN pip install -r requirements.txt
 
-# সোর্স কোড কপি করা (index.html সহ)
-COPY . /app/
+# Install yt-dlp and set executable permissions
+RUN apt-get update && apt-get install -y yt-dlp && chmod +x /usr/local/bin/yt-dlp
 
-# পোর্ট এক্সপোজ করা
+# Create a downloads directory
+RUN mkdir -p /app/downloads && chmod -R 777 /app/downloads
+
+# Set environment variables for Flask
+ENV FLASK_ENV=production
+ENV FLASK_APP=bot.py
+
+# Expose the port Flask will run on
 EXPOSE 3000
 
-# অ্যাপ্লিকেশন চালানো
-CMD ["python", "bot.py"]
+# Command to run the Flask app
+CMD ["flask", "run", "--host=0.0.0.0", "--port=3000"]
