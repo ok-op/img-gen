@@ -18,12 +18,13 @@ venv/
 .git/
 .gitignore
 
-# Docker files
+# Docker files (don't include the Dockerfile or .dockerignore itself in the image)
 Dockerfile
 .dockerignore
 
 # Downloaded files (if not needed in the image)
 downloads/
 
-# Don't ignore the cookies.txt if you need it in the container
-# cookies.txt  <-- Don't add cookies.txt here if you need to use it
+# Ignore other temporary files
+*.swp
+*.swo
