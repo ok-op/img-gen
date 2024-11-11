@@ -10,6 +10,9 @@ COPY . .
 # Install any needed packages specified in requirements.txt
 RUN pip install -r requirements.txt
 
+# Install Gunicorn for production
+RUN pip install gunicorn
+
 # Install yt-dlp and set executable permissions
 RUN apt-get update && apt-get install -y yt-dlp && chmod +x /usr/local/bin/yt-dlp
 
@@ -24,7 +27,11 @@ ENV FLASK_APP=bot.py
 EXPOSE 3000
 
 # Command to run the Flask app
-CMD ["flask", "run", "--host=0.0.0.0", "--port=3000"]
+# CMD ["flask", "run", "--host=0.0.0.0", "--port=3000"]
+
+# Command to run the Flask app with Gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:3000", "bot:app"]
+
 
 
 # Run the Flask application
