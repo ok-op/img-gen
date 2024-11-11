@@ -1,17 +1,12 @@
 version: '3.8'
 
 services:
-  web:
+  app:
     build: .
-    container_name: woodcraft-app
+    container_name: my-python-app
     ports:
       - "3000:3000"
     volumes:
-      - .:/app  
-    networks:
-      - web-network
-    restart: always  
-
-networks:
-  web-network:
-    driver: bridge
+      - .:/app
+    restart: always
+    
