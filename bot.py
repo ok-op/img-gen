@@ -4,6 +4,13 @@ import yt_dlp
 import threading
 import time
 
+# Set environment variables directly in the code
+os.environ['FLASK_ENV'] = 'production'
+os.environ['FLASK_APP'] = 'bot.py'
+os.environ['FLASK_RUN_HOST'] = '0.0.0.0'
+os.environ['FLASK_RUN_PORT'] = '3000'
+
+
 app = Flask(__name__)
 
 # ডাউনলোড ফোল্ডার তৈরি করা
@@ -107,4 +114,4 @@ def health_check():
     return jsonify(status='OK'), 200
     
 if __name__ == '__main__':
-    app.run(debug=True, port=3000)
+    app.run(host=os.getenv('FLASK_RUN_HOST', '0.0.0.0'), port=int(os.getenv('FLASK_RUN_PORT', 3000)))
