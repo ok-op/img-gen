@@ -17,6 +17,7 @@ venv/
 # Git and version control folders
 .git/
 .gitignore
+cookies.txt
 
 # Docker files
 Dockerfile
