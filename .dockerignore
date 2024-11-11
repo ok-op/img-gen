@@ -1,22 +1,9 @@
-# Python cache and compiled files
 __pycache__/
 *.py[cod]
 *.pyo
 *.pyd
 .Python
 *.pytest_cache/
-
-# Virtual environment folders
-env/
-venv/
-
-# System files
-.DS_Store
 *.log
-
-# Git and version control folders
 .git/
-
-# Ignore other temporary files
-*.swp
-*.swo
+downloads/
