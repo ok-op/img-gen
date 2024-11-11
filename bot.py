@@ -2,7 +2,6 @@ from flask import Flask, request, render_template, send_from_directory, jsonify
 import os
 import yt_dlp
 import threading
-import time
 
 # Set environment variables directly in the code
 os.environ['FLASK_ENV'] = 'production'
@@ -10,13 +9,7 @@ os.environ['FLASK_APP'] = 'bot.py'
 os.environ['FLASK_RUN_HOST'] = '0.0.0.0'
 os.environ['FLASK_RUN_PORT'] = '3000'
 
-
 app = Flask(__name__)
-
-# ডাউনলোড ফোল্ডার তৈরি করা
-download_folder = 'downloads'
-if not os.path.exists(download_folder):
-    os.makedirs(download_folder)
 
 # ডাউনলোড ফোল্ডার তৈরি করা
 download_folder = 'downloads'
@@ -32,7 +25,7 @@ def download_video(url, custom_name="downloaded_video"):
         # yt-dlp কনফিগারেশন
         ydl_opts = {
             'format': 'bestvideo[ext=mp4][vcodec=avc1]+bestaudio/best',  # AVC ফরম্যাট এবং avc1 কোডেক
-            'outtmpl': os.path.join(download_folder, f'{custom_name}.%(ext)s'),
+            'outtmpl': os.path.join(download_folder, f'{custom_name}.%(ext)s'),  # ফাইল নামের সাথে এক্সটেনশন সহ
             'cookiefile': cookie_file,  # কুকি ফাইলের পাথ যুক্ত করুন
         }
 
@@ -57,7 +50,8 @@ def get_metadata(url):
 # ফাইল ডিলিট করার ফাংশন (১০ মিনিট পর)
 def delete_file(filepath):
     """Delete a file after 10 minutes"""
-    time.sleep(600)  # 600 সেকেন্ড = 10 মিনিট
+    # Instead of blocking, we could schedule a background task
+    threading.Event().wait(600)  # Wait for 10 minutes
     try:
         if os.path.exists(filepath):
             os.remove(filepath)
@@ -109,6 +103,7 @@ def download_file(filename):
         as_attachment=True  # এটি নিশ্চিত করবে যে ফাইলটি ব্রাউজারের মধ্যে ডাউনলোড হবে
     )
 
+# স্বাস্থ্য পরীক্ষা রুট
 @app.route('/health', methods=['GET'])
 def health_check():
     return jsonify(status='OK'), 200
