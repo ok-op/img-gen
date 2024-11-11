@@ -1,30 +1,23 @@
-# Use an official Python runtime as a base image
-FROM python:3.9
+# Python base image ব্যবহার করা হচ্ছে
+FROM python:3.10-slim
 
-# Set the working directory
+# কাজের ডিরেক্টরি সেট করা
 WORKDIR /app
 
-# Copy the current directory contents into the container at /app
+# প্রয়োজনীয় প্যাকেজগুলোর ইনস্টল করা
+COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
+
+# কোড কপি করা
 COPY . .
 
-# Install any needed packages specified in requirements.txt
-RUN pip install -r requirements.txt
+# ডাউনলোড ফোল্ডারকে ভলিউম হিসেবে সেট করা
+VOLUME /app/downloads
 
-# Install Gunicorn for production
-RUN pip install gunicorn
-
-# Install yt-dlp and set executable permissions
-RUN apt-get update && apt-get install -y yt-dlp && chmod +x /usr/local/bin/yt-dlp
-
-# Create a downloads directory
-RUN mkdir -p /app/downloads && chmod -R 777 /app/downloads
-
-# Set environment variables for Flask
+# Flask পরিবেশ ভেরিয়েবল সেট করা
+ENV FLASK_APP=bot.py
 ENV FLASK_ENV=production
 ENV FLASK_DEBUG=0
 
-# Expose the port Flask will run on
-EXPOSE 3000
-
-# Command to run the Flask app with Gunicorn
+# Gunicorn দিয়ে Flask অ্যাপ রান করা
 CMD ["gunicorn", "--bind", "0.0.0.0:3000", "bot:app"]
