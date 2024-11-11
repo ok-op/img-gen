@@ -78,6 +78,30 @@
             transition: background-color 0.3s ease;
         }
 
+        /* Style the download link */
+        .download-button {
+            display: flex;
+            align-items: center;   /* Vertically centers the icon and text */
+            justify-content: center;  /* Horizontally centers the content */
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 30px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        .download-button:hover {
+            background-color: #45a049;
+        }
+
+        .download-button i {
+            margin: 0 8px;  /* Adds space between the icon and text */
+        }
+
         button:hover {
             background-color: #45a049;
         }
@@ -170,7 +194,7 @@
         {% if download_url %}
         <div class="download-link">
             <p>Your download is ready:</p>
-            <a href="{{ download_url }}" download><i class="fa fa-download"></i>Click here to download the video</a>
+            <a href="{{ download_url }}" download class="download-button"><i class="fa fa-download"></i> Click here to download the video <i class="fa fa-download"></i></a>
         </div>
         {% endif %}
     </div>
