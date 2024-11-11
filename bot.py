@@ -107,5 +107,4 @@ def health_check():
     return jsonify(status='OK'), 200
     
 if __name__ == '__main__':
-    port = int(os.getenv("PORT", 3000))
-    app.run(debug=False, host="0.0.0.0", port=port)
+    app.run(debug=True, port=3000)
