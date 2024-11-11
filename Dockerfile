@@ -11,9 +11,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 # কোড কপি করা
 COPY . .
 
-# ডাউনলোড ফোল্ডারকে ভলিউম হিসেবে সেট করা
-VOLUME /app/downloads
-
 # Flask পরিবেশ ভেরিয়েবল সেট করা
 ENV FLASK_APP=bot.py
 ENV FLASK_ENV=production
