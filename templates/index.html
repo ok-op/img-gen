@@ -21,14 +21,15 @@
         /* Header Style */
         header {
             text-align: center;
-            margin-top: 30px; /* gap from the top */
-            margin-bottom: 20px; /* gap from the bottom */
+            margin-top: 20px; /* Adds gap from top */
+            margin-bottom: 20px; /* Adds gap from bottom */
         }
 
         .logo {
             width: 300px;  /* Setting the size of the logo */
             height: 100px;
             object-fit: contain; /* Ensures the logo is properly scaled */
+            margin-top: 10px; /* Adds gap at the top */
         }
 
         .title {
@@ -125,6 +126,31 @@
         footer a:hover {
             text-decoration: underline;
         }
+
+        /* Responsive Design for Mobile */
+        @media (max-width: 600px) {
+            .logo {
+                width: 80%; /* Adjusts the logo size for mobile */
+                height: auto;
+            }
+
+            .container {
+                width: 90%; /* Adjusts the container width for mobile */
+                padding: 20px;
+            }
+
+            h1 {
+                font-size: 20px; /* Adjusts the font size for mobile */
+            }
+
+            .title {
+                font-size: 16px; /* Adjusts the title font size */
+            }
+
+            footer {
+                font-size: 12px; /* Adjusts footer font size */
+            }
+        }
     </style>
 </head>
 <body>
@@ -153,4 +179,4 @@
         <p>Made with ❤️ by <a href="https://yourwebsite.com" target="_blank">WOODcraft</a></p>
     </footer>
 </body>
-    </html>
+</html>
