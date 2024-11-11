@@ -1,7 +1,5 @@
 __pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-.Python
-*.pytest_cache/
-*.log
+node_modules
+npm-debug.log
+Dockerfile
+.dockerignore
